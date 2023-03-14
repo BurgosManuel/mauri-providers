@@ -13,10 +13,7 @@ import com.demo.challenge.repositories.IProductRepository;
 import com.demo.challenge.servicesInterfaces.IProductService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -56,6 +53,26 @@ public class ImpProductService implements IProductService {
             productDTO.add(prod);
         }
         return productDTO;
+    }
+
+    public List<ProductDTO> findProductsByProviderId(int providerId) {
+        try {
+            List<Product> listProduct = Optional.ofNullable(iproductRepository.findProductsByProviderId(providerId)).orElse(null);
+            if (Objects.nonNull(listProduct) && !listProduct.isEmpty()){
+                List<ProductDTO> listProductDTO = new ArrayList<>();
+                // Te recomiendo usar Streams en lugar de For normales, son un poco más eficientes y además quedan facheros jajaja
+                // Tienen métodos muy interesantes (map, filter, etc.), dales una mirada porque sirven mucho
+                listProduct.stream().forEach(product -> {
+                    ProductDTO productDTO = mapper.map(product, ProductDTO.class);
+                    listProductDTO.add(productDTO);
+                });
+                return listProductDTO;
+            }
+        }catch (NoSuchElementException ex) {
+            throw new RequestException("P-420", "No se encontraron productos que coincidan con la ID del Proveedor.");
+        }
+
+        return null;
     }
 
     @Override

@@ -18,6 +18,9 @@ public interface IProductService {
 
     List<ProductDTO> getProducts();
 
+    // Agregamos método a la interfaz
+    List<ProductDTO> findProductsByProviderId(int providerId);
+
     List<ProductDTO> getActiveProducts(Boolean status);
 
     ProductDTO findProductById(int id);

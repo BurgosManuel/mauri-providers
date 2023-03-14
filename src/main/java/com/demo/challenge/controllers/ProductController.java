@@ -40,6 +40,12 @@ public class ProductController {
         return iproductService.findProductById(id);
     }
 
+    // Nuevo endpoint para traer por providerId
+    @GetMapping("/findByProvider/{providerId}")
+    public List<ProductDTO> getProductByProviderId(@PathVariable int providerId) {
+        return iproductService.findProductsByProviderId(providerId);
+    }
+
     @GetMapping("/activos")
     public List<ProductDTO> getActiveProducts() {
         return iproductService.getActiveProducts(true);
